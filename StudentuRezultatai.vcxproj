@@ -139,16 +139,23 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="failai.cpp" />`r`n    <ClCompile Include="manual.cpp" />
+    <ClCompile Include="failai.cpp" />
+	  <ClCompile Include="ivestis.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="results.cpp" />
-    <ClCompile Include="studentas.cpp" />`r`n    <ClCompile Include="testai.cpp" />
+    <ClCompile Include="studentas.cpp" />
+	  <ClCompile Include="testai.cpp" />
     <ClCompile Include="utils.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="failai.h" />`r`n    <ClInclude Include="manual.h" />`r`n    <ClInclude Include="nustatymai.h" />
+    <ClInclude Include="failai.h" />
+	  <ClInclude Include="benchmark.h" />
+	  <ClInclude Include="ivestis.h" />
+	  <ClInclude Include="konteineriai.h" />
+	  <ClInclude Include="manual.h" /> 
     <ClInclude Include="results.h" />
-    <ClInclude Include="studentas.h" />`r`n    <ClInclude Include="testai.h" />
+    <ClInclude Include="studentas.h" />
+	  <ClInclude Include="testai.h" />
     <ClInclude Include="timer.h" />
     <ClInclude Include="utils.h" />
   </ItemGroup>

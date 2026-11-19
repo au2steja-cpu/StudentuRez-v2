@@ -3,6 +3,7 @@
 #include <vector>
 
 enum class Rusiuoti { vardas, pavarde, galutinis };
+enum class Strategija { Pirma = 1, Antra = 2, Trecia = 3 };
 constexpr double IslaikymoRiba = 5.0;
 
 struct Studentas {
