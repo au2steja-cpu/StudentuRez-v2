@@ -1,4 +1,4 @@
-﻿#include "utils.h"
+#include "utils.h"
 
 #include <iostream>
 #include <stdexcept>
@@ -42,14 +42,14 @@ int ivestiSkaiciu(const string& klausimas, int nuo, int iki) {
 	while (std::getline(std::cin, eilute)) {
 		int sk;
 		if (!iSkaiciu(eilute, sk)) {
-			std::cout << "Įvesta netinkama reikšmė (ne skaičius arba per didelis skaičius), bandykite vėl.\n";
+			std::cout << "Ivesta netinkama reiksme (ne skaicius arba per didelis skaicius), bandykite vel.\n";
 		}
 		else if (sk < nuo || sk > iki) {
 			if (iki == be_ribos) {
-				std::cout << "Skaičius turi būti ne mažesnis nei " << nuo << ".\n";
+				std::cout << "Skaicius turi buti ne mazesnis nei " << nuo << ".\n";
 			}
 			else {
-				std::cout << "Skaičius turi būti nuo " << nuo << " iki " << iki << ".\n";
+				std::cout << "Skaicius turi buti nuo " << nuo << " iki " << iki << ".\n";
 			}
 		}
 		else {
@@ -57,7 +57,7 @@ int ivestiSkaiciu(const string& klausimas, int nuo, int iki) {
 		}
 		std::cout << klausimas;
 	}
-	std::cout << "Įvedamas skaičius " << nuo << std::endl;
+	std::cout << "Ivedamas skaicius " << nuo << std::endl;
 	return nuo;
 }
 
@@ -67,7 +67,7 @@ bool taipArNe(const string& klausimas) {
 	while (std::getline(std::cin, eilute)) {
 		if (eilute == "y") return true;
 		if (eilute == "n") return false;
-		std::cout << "Įveskite \"n\" arba \"y\"\n";
+		std::cout << "Iveskite \"n\" arba \"y\"\n";
 		std::cout << klausimas;
 	}
 	std::cout << "Nepavyko nuskaityti atsakymo, priskiriamas [n] atsakymas" << std::endl;
