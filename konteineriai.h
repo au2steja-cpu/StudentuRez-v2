@@ -21,7 +21,7 @@ template <> struct KonteinerioVardas<std::list<Studentas>> { static constexpr co
 namespace detail {
 	inline void rasytiAntraste(std::ostream& out) {
 		out << std::left << std::setw(plotis) << "Vardas" << "|";
-		out << std::setw(utf8Plotis("Pavardė")) << "Pavardė" << "|";
+		out << std::setw(utf8Plotis("Pavarde")) << "Pavarde" << "|";
 		out << std::setw(plotis) << "Galutinis" << "|\n";
 	}
 

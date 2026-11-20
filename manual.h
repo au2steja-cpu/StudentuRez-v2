@@ -33,28 +33,28 @@ void ivestiRanka(bool zinomas_sk, Statistika statistika, Rezimas rezimas, std::o
     std::mt19937 gen(static_cast<std::mt19937::result_type>(seed));
     std::uniform_int_distribution<int> pazymiu_dist(Min_paz, Max_paz);
     Konteineris grupe;
-    const int studkiekis = ivestiSk("Įveskite studentų skaičių: ", 1, Be_ribos);
+    const int studkiekis = ivestiSk("Iveskite studentu skaiciu: ", 1, Be_ribos);
     for (int i = 0; i < studkiekis; i++) {
         Studentas st;
 
-        std::cout << "Įveskite vardą: ";
+        std::cout << "Iveskite varda: ";
         std::cin >> st.vardas;
 
-        std::cout << "Įveskite pavardę: ";
+        std::cout << "Iveskite pavarde: ";
         std::cin >> st.pavarde;
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
         if (zinomas_sk) {
-            const int kiekis = ivestiSk("Įveskite namų darbų skaičių: ", 0, Be_ribos);
+            const int kiekis = ivestiSk("Iveskite namu darbu skaiciu: ", 0, Be_ribos);
             if (rezimas == Rezimas::Ranka) {
                 for (int j = 1; j <= kiekis; j++) {
                     st.paz.push_back(ivestiSk(
-                        "Įveskite " + std::to_string(j) + "-ąjį pažymį: ", Min_paz, Max_paz));
+                        "Iveskite " + std::to_string(j) + "-aji pazymi: ", Min_paz, Max_paz));
                     std::cout << '\n';
                 }
             }
             else {
-                std::cout << "Suvesti atsitiktiniai pažymiai: ";
+                std::cout << "Suvesti atsitiktiniai pazymiai: ";
                 for (int j = 0; j < kiekis; j++) {
                     const int sk = pazymiu_dist(gen);
                     st.paz.push_back(sk);
@@ -66,14 +66,14 @@ void ivestiRanka(bool zinomas_sk, Statistika statistika, Rezimas rezimas, std::o
         else {
             std::string eilute;
             while (true) {
-                std::cout << "Įveskite " << st.paz.size() + 1 << "-ąjį pažymį (Enter, kad užbaigti): ";
+                std::cout << "Iveskite " << st.paz.size() + 1 << "-aji pazymi (Enter, kad uzbaigti): ";
                 if (!std::getline(std::cin, eilute) || eilute.empty()) break;
                 int pazymys;
                 if (!iSkaiciu(eilute, pazymys)) {
-                    std::cout << "Įvesta netinkama reikšmė (ne skaičius arba per didelis skaičius)!\n";
+                    std::cout << "Ivesta netinkama reiksme (ne skaicius arba per didelis skaicius)!\n";
                 }
                 else if (pazymys < Min_paz || pazymys > Max_paz) {
-                    std::cout << "Pažymys turi būti nuo " << Min_paz << " iki " << Max_paz << "!\n";
+                    std::cout << "Pazymys turi buti nuo " << Min_paz << " iki " << Max_paz << "!\n";
                 }
                 else {
                     st.paz.push_back(pazymys);
@@ -85,12 +85,12 @@ void ivestiRanka(bool zinomas_sk, Statistika statistika, Rezimas rezimas, std::o
             std::cout << "Atsitiktinis egzamino rezultatas: " << st.exam << '\n';
         }
         else {
-            st.exam = ivestiSk("Įveskite egzamino rezultatą: ", Min_paz, Max_paz);
+            st.exam = ivestiSk("Iveskite egzamino rezultata: ", Min_paz, Max_paz);
         }
 
         skaiciuotiGalutini(st);
         grupe.push_back(st);
-        std::cout << "Įvesto studento adresas atmintyje: " << &grupe.back() << "\n";
+        std::cout << "Ivesto studento adresas atmintyje: " << &grupe.back() << "\n";
     }
     rusiuotiStudentus(grupe, rusiuoti, tvarka);
     pagalba::rasytiGrupe(output, grupe, statistika);

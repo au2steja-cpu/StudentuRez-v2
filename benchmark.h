@@ -49,7 +49,7 @@ Rezultatai testuotiFaila(int dydis, int kartai, Rusiuoti rusiuoti) {
 
 		rez.bendri.push_back(apdorojimas.elapsed());
 		std::cout << "    nuskaitymas " << rez.nuskaitymai.back()
-			<< " s | rūšiavimas " << rez.rusiavimai.back()
+			<< " s | rusiavimas " << rez.rusiavimai.back()
 			<< " s | dalijimas " << rez.dalijimai.back()
 			<< " s | viso " << rez.bendri.back() << " s\n";
 	}

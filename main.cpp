@@ -48,7 +48,7 @@ namespace {
 		spausdintiLentele(out, "std::vector", rezVector);
 		spausdintiLentele(out, "std::list", rezList);
 		spausdintiPalyginima(out, rezVector, rezList);
-		std::cout << "\nRezultatų lentelės įrašytos į rezultatai.md\n";
+		std::cout << "\nRezultatu lenteles irasytos i rezultatai.md\n";
 	}
 }
 
@@ -62,7 +62,7 @@ int main(int argc, char* argv[]) {
 
 	std::cout << "--- Studentu rezultatai v0.3 ---\n"
 		<< "[1] - Rankinis ivedimas (rodomi objektu atminties adresai)\n"
-		<< "[2] - Konteinerių testavimas (vector vs list)\n"
+		<< "[2] - Konteineriu testavimas (vector vs list)\n"
 		<< "[0] - Iseiti\n";
 	switch (ivestiSkaiciu("Pasirinkite programos rezima: ", 0, 2)) {
 	case 1: rankinisIvedimas(); break;

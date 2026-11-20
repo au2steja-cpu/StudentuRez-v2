@@ -22,30 +22,30 @@ void testas(int i, int j, const std::string& pavadinimas, Rezultatai& rezultatai
         skaiciuotiGalutini(st);
     }
     rezultatai.galutiniai.push_back(t.elapsed());
-    std::cout << "  Galutinių skaičiavimas: " << rezultatai.galutiniai[j] << " s\n";
+    std::cout << "  Galutiniu skaiciavimas: " << rezultatai.galutiniai[j] << " s\n";
 
     t.reset();
 
     rusiuotiStudentus(grupe, rusiuoti, tvarka);
     rezultatai.rusiavimai.push_back(t.elapsed());
-    std::cout << "  Rūšiavimas: " << rezultatai.rusiavimai[j] << " s\n";
+    std::cout << "  Rusiavimas: " << rezultatai.rusiavimai[j] << " s\n";
 
     t.reset();
     Konteineris nuskriaustukai, kietukai;
     skirstytiStudentus(grupe, nuskriaustukai, kietukai);
     grupe.clear();
     rezultatai.dalijimai.push_back(t.elapsed());
-    std::cout << "  Dalijimas į dvi grupes: " << rezultatai.dalijimai[j] << " s\n";
+    std::cout << "  Dalijimas i dvi grupes: " << rezultatai.dalijimai[j] << " s\n";
 
     t.reset();
     isvestiStudentus(nuskriaustukai, failoPavadinimas("nuskriaustukai", i));
     rezultatai.isvedimaiNuskriaustuku.push_back(t.elapsed());
-    std::cout << "  Nuskriaustukų išvedimas: " << rezultatai.isvedimaiNuskriaustuku[j] << " s\n";
+    std::cout << "  Nuskriaustuku isvedimas: " << rezultatai.isvedimaiNuskriaustuku[j] << " s\n";
 
     t.reset();
     isvestiStudentus(kietukai, failoPavadinimas("kietukai", i));
     rezultatai.isvedimaiKietuku.push_back(t.elapsed());
-    std::cout << "  Kietukų išvedimas: " << rezultatai.isvedimaiKietuku[j] << " s\n";
+    std::cout << "  Kietuku isvedimas: " << rezultatai.isvedimaiKietuku[j] << " s\n";
     rezultatai.bendri.push_back(apdorojimas.elapsed());
     std::cout << "  Viso apdorojimas: " << rezultatai.bendri[j] << " s\n\n";
 }

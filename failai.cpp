@@ -26,7 +26,7 @@ void generuotiFaila(const int n) {
 	std::ofstream output(pavadinimas);
 
 	output << std::left << std::setw(plotis) << "Vardas";
-	output << std::setw(utf8Plotis("Pavardė")) << "Pavardė";
+	output << std::setw(utf8Plotis("Pavarde")) << "Pavarde";
 	for (int i = 0; i < ndKiekis; i++) {
 		output << std::setw(plotis) << "Nd" + std::to_string(i + 1);
 	}
