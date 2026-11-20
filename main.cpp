@@ -20,9 +20,8 @@
 #include "utils.h"
 
 namespace {
-	void testavimas(int maxFailas) {
+	void testavimas(int maxFailas, int kartai) {
 		constexpr int MINFAILAS = 1000;
-		constexpr int KARTAI = 5;
 
 		std::cout << "Pagal ka rusiuoti isvesties failus?\n"
 			<< "[0] - Varda\n[1] - Pavarde\n[2] - Galutini bala\n";
@@ -38,16 +37,24 @@ namespace {
 			std::cout << "Visu failu generavimas uztruko: " << visas.elapsed() << " s\n\n";
 		}
 
-		std::vector<Rezultatai> rezVector, rezList;
+		std::vector<Rezultatai> visi;
+		std::vector<Rezultatai> rezVector[3], rezList[3];
 		for (int i = MINFAILAS; i <= maxFailas; i *= 10) {
-			rezVector.push_back(testuotiFaila<std::vector<Studentas>>(i, KARTAI, rusiuoti));
-			rezList.push_back(testuotiFaila<std::list<Studentas>>(i, KARTAI, rusiuoti));
+			for (Strategija str : { Strategija::Pirma, Strategija::Antra, Strategija::Trecia }) {
+				const int n = static_cast<int>(str) - 1;
+				rezVector[n].push_back(testuotiFaila<std::vector<Studentas>>(i, kartai, rusiuoti, str));
+				rezList[n].push_back(testuotiFaila<std::list<Studentas>>(i, kartai, rusiuoti, str));
+				visi.push_back(rezVector[n].back());
+				visi.push_back(rezList[n].back());
+			}
 		}
 
 		std::ofstream out("rezultatai.md");
-		spausdintiLentele(out, "std::vector", rezVector);
-		spausdintiLentele(out, "std::list", rezList);
-		spausdintiPalyginima(out, rezVector, rezList);
+		for (int n = 0; n < 3; n++) {
+			spausdintiLentele(out, "std::vector, " + std::to_string(n + 1) + " strategija", rezVector[n]);
+			spausdintiLentele(out, "std::list, " + std::to_string(n + 1) + " strategija", rezList[n]);
+		}
+		spausdintiPalyginima(out, visi);
 		std::cout << "\nRezultatu lenteles irasytos i rezultatai.md\n";
 	}
 }
@@ -57,16 +64,18 @@ int main(int argc, char* argv[]) {
 	SetConsoleOutputCP(CP_UTF8);
 	SetConsoleCP(CP_UTF8);
 #endif
-	const int maxFailas = argc > 1 ? std::stoi(argv[1]) : 10000000;
+	// argumentai: [maksimalus failo dydis] [kiek kartu kartoti kiekviena testa]
+	const int maxFailas = argc > 1 ? std::stoi(argv[1]) : 100000;
+	const int kartai = argc > 2 ? std::stoi(argv[2]) : 3;
 	std::cout << std::fixed << std::setprecision(3);
 
 	std::cout << "--- Studentu rezultatai v0.3 ---\n"
 		<< "[1] - Rankinis ivedimas (rodomi objektu atminties adresai)\n"
-		<< "[2] - Konteineriu testavimas (vector vs list)\n"
+		<< "[2] - Konteineriu testavimas (vector vs list, 1-3 strategijos)\n"
 		<< "[0] - Iseiti\n";
 	switch (ivestiSkaiciu("Pasirinkite programos rezima: ", 0, 2)) {
 	case 1: rankinisIvedimas(); break;
-	case 2: testavimas(maxFailas); break;
+	case 2: testavimas(maxFailas, kartai); break;
 	default: break;
 	}
 }

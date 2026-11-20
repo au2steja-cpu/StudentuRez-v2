@@ -108,10 +108,58 @@ void rusiuotiStudentus(C& grupe, Rusiuoti r) {
 	}
 }
 
-template <typename C>
-void dalintiStudentus(C& grupe, C& nuskriaustukai, C& kietukai) {
-	for (Studentas& st : grupe) {
-		(st.galutinis < IslaikymoRiba ? nuskriaustukai : kietukai).push_back(std::move(st));
+namespace detail {
+	template <typename C>
+	constexpr bool arAtsitiktinisPrieiga() {
+		using Kategorija = typename std::iterator_traits<typename C::iterator>::iterator_category;
+		return std::is_base_of_v<std::random_access_iterator_tag, Kategorija>;
 	}
-	grupe.clear();
+
+	inline bool vargsiukas(const Studentas& st) { return st.galutinis < IslaikymoRiba; }
+}
+
+// 1 strategija: studentai kopijuojami i du NAUJUS konteinerius (vargsiukai ir kietiakai),
+// bendras konteineris `grupe` lieka nepakites.
+template <typename C>
+void dalintiStrategija1(const C& grupe, C& vargsiukai, C& kietiakai) {
+	std::copy_if(grupe.begin(), grupe.end(), std::back_inserter(vargsiukai),
+		[](const Studentas& st) { return detail::vargsiukas(st); });
+	std::copy_if(grupe.begin(), grupe.end(), std::back_inserter(kietiakai),
+		[](const Studentas& st) { return !detail::vargsiukas(st); });
+}
+
+// 2 strategija: sukuriamas tik vienas naujas konteineris (vargsiukai); jie nukopijuojami
+// (std::copy_if) ir istrinami is bendro konteinerio. `grupe` po funkcijos lieka tik kietiakai.
+template <typename C>
+void dalintiStrategija2(C& grupe, C& vargsiukai) {
+	std::copy_if(grupe.begin(), grupe.end(), std::back_inserter(vargsiukai),
+		[](const Studentas& st) { return detail::vargsiukas(st); });
+	if constexpr (detail::arAtsitiktinisPrieiga<C>()) {
+		grupe.erase(std::remove_if(grupe.begin(), grupe.end(),
+			[](const Studentas& st) { return detail::vargsiukas(st); }), grupe.end());
+	}
+	else {
+		grupe.remove_if([](const Studentas& st) { return detail::vargsiukas(st); });
+	}
+}
+
+// 3 strategija: optimizuota 2 strategija. Nieko nekopijuojama:
+//  - vector: std::stable_partition (islaiko tvarka) + vargsiuku perkelimas (move) ir vienas erase;
+//  - list:   mazgai perkeliami std::list::splice (be alokavimo ir be kopijavimo).
+template <typename C>
+void dalintiStrategija3(C& grupe, C& vargsiukai) {
+	if constexpr (detail::arAtsitiktinisPrieiga<C>()) {
+		auto riba = std::stable_partition(grupe.begin(), grupe.end(),
+			[](const Studentas& st) { return !detail::vargsiukas(st); });
+		vargsiukai.reserve(static_cast<size_t>(std::distance(riba, grupe.end())));
+		std::move(riba, grupe.end(), std::back_inserter(vargsiukai));
+		grupe.erase(riba, grupe.end());
+	}
+	else {
+		for (auto it = grupe.begin(); it != grupe.end();) {
+			auto kitas = std::next(it);
+			if (detail::vargsiukas(*it)) vargsiukai.splice(vargsiukai.end(), grupe, it);
+			it = kitas;
+		}
+	}
 }

@@ -8,14 +8,16 @@
 #include "timer.h"
 
 template <typename C>
-Rezultatai testuotiFaila(int dydis, int kartai, Rusiuoti rusiuoti) {
+Rezultatai testuotiFaila(int dydis, int kartai, Rusiuoti rusiuoti, Strategija strategija) {
 	const std::string vardas = KonteinerioVardas<C>::vardas;
+	const int str = static_cast<int>(strategija);
 	Rezultatai rez;
 	rez.konteineris = vardas;
+	rez.strategija = str;
 	rez.dydis = dydis;
 
 	const std::string pavadinimas = failoPavadinimas("kursiokai", dydis);
-	std::cout << "[" << vardas << "] Apdorojamas failas " << pavadinimas << "\n";
+	std::cout << "[" << vardas << ", " << str << " strategija] Apdorojamas failas " << pavadinimas << "\n";
 
 	for (int j = 0; j < kartai; j++) {
 		std::cout << "  " << j + 1 << "-oji iteracija\n";
@@ -35,16 +37,28 @@ Rezultatai testuotiFaila(int dydis, int kartai, Rusiuoti rusiuoti) {
 		rez.rusiavimai.push_back(t.elapsed());
 
 		t.reset();
-		C nuskriaustukai, kietukai;
-		dalintiStudentus(grupe, nuskriaustukai, kietukai);
+		C vargsiukai, kietiakai;
+		const C* kietiakuSaltinis = &grupe;
+		switch (strategija) {
+		case Strategija::Pirma:
+			dalintiStrategija1(grupe, vargsiukai, kietiakai);
+			kietiakuSaltinis = &kietiakai;
+			break;
+		case Strategija::Antra:
+			dalintiStrategija2(grupe, vargsiukai);
+			break;
+		case Strategija::Trecia:
+			dalintiStrategija3(grupe, vargsiukai);
+			break;
+		}
 		rez.dalijimai.push_back(t.elapsed());
 
 		t.reset();
-		isvestiStudentus(nuskriaustukai, failoPavadinimas("nuskriaustukai_" + vardas + "_", dydis));
+		isvestiStudentus(vargsiukai, failoPavadinimas("nuskriaustukai_" + vardas + "_", dydis));
 		rez.isvedimaiNuskriaustuku.push_back(t.elapsed());
 
 		t.reset();
-		isvestiStudentus(kietukai, failoPavadinimas("kietukai_" + vardas + "_", dydis));
+		isvestiStudentus(*kietiakuSaltinis, failoPavadinimas("kietukai_" + vardas + "_", dydis));
 		rez.isvedimaiKietuku.push_back(t.elapsed());
 
 		rez.bendri.push_back(apdorojimas.elapsed());
