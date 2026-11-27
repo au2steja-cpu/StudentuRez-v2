@@ -25,12 +25,6 @@ namespace detail {
 		out << std::setw(plotis) << "Galutinis" << "|\n";
 	}
 
-	inline void rasytiStudenta(std::ostream& out, const Studentas& s) {
-		out << std::left << std::setw(utf8Plotis(s.vardas)) << s.vardas << "|";
-		out << std::setw(utf8Plotis(s.pavarde)) << s.pavarde << "|";
-		out << std::right << std::setw(plotis) << s.galutinis << "|\n";
-	}
-
 	template <typename C, typename Cmp>
 	void rusiuoti(C& c, Cmp cmp) {
 		using Kategorija = typename std::iterator_traits<typename C::iterator>::iterator_category;
@@ -57,17 +51,19 @@ void nuskaitytiStudentus(C& grupe, const std::string& filename) {
 	const int pazKiekis = std::max(stulpeliu - 3, 0);
 
 	while (std::getline(ins, eilute)) {
-		Studentas s;
 		std::istringstream duomenys(eilute);
-		duomenys >> s.vardas >> s.pavarde;
-		s.paz.reserve(pazKiekis);
+		std::string vardas, pavarde;
+		std::vector<int> paz;
+		int egzaminas = 0;
+		duomenys >> vardas >> pavarde;
+		paz.reserve(pazKiekis);
 		for (int i = 0; i < pazKiekis; i++) {
 			int num;
 			duomenys >> num;
-			s.paz.push_back(num);
+			paz.push_back(num);
 		}
-		duomenys >> s.exam;
-		grupe.push_back(std::move(s));
+		duomenys >> egzaminas;
+		grupe.emplace_back(std::move(vardas), std::move(pavarde), std::move(paz), egzaminas);
 	}
 }
 
@@ -77,7 +73,7 @@ void isvestiStudentus(const C& grupe, const std::string& filename) {
 	out << std::fixed << std::setprecision(2);
 	detail::rasytiAntraste(out);
 	for (const Studentas& s : grupe) {
-		detail::rasytiStudenta(out, s);
+		out << s;
 	}
 }
 
@@ -86,23 +82,23 @@ void rusiuotiStudentus(C& grupe, Rusiuoti r) {
 	switch (r) {
 	case Rusiuoti::vardas:
 		detail::rusiuoti(grupe, [](const Studentas& a, const Studentas& b) {
-			if (a.vardas != b.vardas) return a.vardas < b.vardas;
-			if (a.pavarde != b.pavarde) return a.pavarde < b.pavarde;
-			return a.galutinis < b.galutinis;
+			if (a.vardas() != b.vardas()) return a.vardas() < b.vardas();
+			if (a.pavarde() != b.pavarde()) return a.pavarde() < b.pavarde();
+			return a.galutinis() < b.galutinis();
 			});
 		break;
 	case Rusiuoti::pavarde:
 		detail::rusiuoti(grupe, [](const Studentas& a, const Studentas& b) {
-			if (a.pavarde != b.pavarde) return a.pavarde < b.pavarde;
-			if (a.vardas != b.vardas) return a.vardas < b.vardas;
-			return a.galutinis < b.galutinis;
+			if (a.pavarde() != b.pavarde()) return a.pavarde() < b.pavarde();
+			if (a.vardas() != b.vardas()) return a.vardas() < b.vardas();
+			return a.galutinis() < b.galutinis();
 			});
 		break;
 	case Rusiuoti::galutinis:
 		detail::rusiuoti(grupe, [](const Studentas& a, const Studentas& b) {
-			if (a.galutinis != b.galutinis) return a.galutinis < b.galutinis;
-			if (a.pavarde != b.pavarde) return a.pavarde < b.pavarde;
-			return a.vardas < b.vardas;
+			if (a.galutinis() != b.galutinis()) return a.galutinis() < b.galutinis();
+			if (a.pavarde() != b.pavarde()) return a.pavarde() < b.pavarde();
+			return a.vardas() < b.vardas();
 			});
 		break;
 	}
@@ -115,7 +111,7 @@ namespace detail {
 		return std::is_base_of_v<std::random_access_iterator_tag, Kategorija>;
 	}
 
-	inline bool vargsiukas(const Studentas& st) { return st.galutinis < IslaikymoRiba; }
+	inline bool vargsiukas(const Studentas& st) { return st.galutinis() < IslaikymoRiba; }
 }
 
 // 1 strategija: studentai kopijuojami i du NAUJUS konteinerius (vargsiukai ir kietiakai),

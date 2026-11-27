@@ -82,7 +82,7 @@ int main(int argc, char* argv[]) {
 	}
 	std::cout << std::fixed << std::setprecision(3);
 
-	std::cout << "--- Studentu rezultatai v1.0 ---\n"
+	std::cout << "--- Studentu rezultatai v1.1 ---\n"
 		<< "[1] - Rankinis ivedimas (rodomi objektu atminties adresai)\n"
 		<< "[2] - Konteineriu testavimas (vector vs list, 1-3 strategijos)\n"
 		<< "[0] - Iseiti\n";

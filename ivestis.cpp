@@ -8,18 +8,20 @@
 
 namespace {
 	Studentas ivestiStudenta() {
-		Studentas s;
+		std::string vardas, pavarde;
+		std::vector<int> paz;
 		std::cout << "\n--- Naujas studentas ---\n";
 		std::cout << "Vardas: ";
-		std::getline(std::cin >> std::ws, s.vardas);
+		std::getline(std::cin >> std::ws, vardas);
 		std::cout << "Pavarde: ";
-		std::getline(std::cin >> std::ws, s.pavarde);
+		std::getline(std::cin >> std::ws, pavarde);
 		const int n = ivestiSkaiciu("Namu darbu kiekis (0-20): ", 0, 20);
 		for (int i = 0; i < n; i++) {
-			s.paz.push_back(ivestiSkaiciu("Namu darbo pazymys " + std::to_string(i + 1) + " (1-10): ", 1, 10));
+			paz.push_back(ivestiSkaiciu("Namu darbo pazymys " + std::to_string(i + 1) + " (1-10): ", 1, 10));
 		}
-		s.exam = ivestiSkaiciu("Egzamino pazymys (1-10): ", 1, 10);
-		skaiciuotiGalutini(s);
+		const int egzaminas = ivestiSkaiciu("Egzamino pazymys (1-10): ", 1, 10);
+		Studentas s(std::move(vardas), std::move(pavarde), std::move(paz), egzaminas);
+		s.skaiciuotiGalutini();
 		return s;
 	}
 
@@ -31,9 +33,9 @@ namespace {
 			<< std::setw(12) << "Galutinis" << "Adresas\n";
 		std::cout << std::fixed << std::setprecision(2);
 		for (const Studentas& s : grupe) {
-			std::cout << std::left << std::setw(utf8Plotis(s.vardas)) << s.vardas
-				<< std::setw(utf8Plotis(s.pavarde)) << s.pavarde
-				<< std::setw(12) << s.galutinis
+			std::cout << std::left << std::setw(utf8Plotis(s.vardas())) << s.vardas()
+				<< std::setw(utf8Plotis(s.pavarde())) << s.pavarde()
+				<< std::setw(12) << s.galutinis()
 				<< static_cast<const void*>(&s) << "\n";
 		}
 	}

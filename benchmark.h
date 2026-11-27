@@ -29,7 +29,7 @@ Rezultatai testuotiFaila(int dydis, int kartai, Rusiuoti rusiuoti, Strategija st
 		rez.nuskaitymai.push_back(t.elapsed());
 
 		t.reset();
-		for (Studentas& st : grupe) skaiciuotiGalutini(st);
+		for (Studentas& st : grupe) st.skaiciuotiGalutini();
 		rez.galutiniai.push_back(t.elapsed());
 
 		t.reset();
