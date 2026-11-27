@@ -1,0 +1,75 @@
+#include "utils.h"
+
+#include <iostream>
+#include <stdexcept>
+#include <string>
+
+using std::string;
+
+namespace {
+	bool iSkaiciu(const string& tekstas, int& rezultatas) {
+		try {
+			size_t pabaiga;
+			int sk = std::stoi(tekstas, &pabaiga);
+			if (tekstas.find_first_not_of(" \t\r", pabaiga) != string::npos) return false;
+			rezultatas = sk;
+			return true;
+		}
+		catch (const std::invalid_argument&) {
+			return false;
+		}
+		catch (const std::out_of_range&) {
+			return false;
+		}
+	}
+}
+
+size_t utf8Ilgis(const std::string& tekstas) {
+	size_t ilgis = 0;
+	for (unsigned char c : tekstas) {
+		if ((c & 0xC0) != 0x80) ilgis++;
+	}
+	return ilgis;
+}
+
+int utf8Plotis(const std::string& tekstas) {
+	return static_cast<int>(plotis + tekstas.size() - utf8Ilgis(tekstas));
+}
+
+int ivestiSkaiciu(const string& klausimas, int nuo, int iki) {
+	string eilute;
+	std::cout << klausimas;
+	while (std::getline(std::cin, eilute)) {
+		int sk;
+		if (!iSkaiciu(eilute, sk)) {
+			std::cout << "Ivesta netinkama reiksme (ne skaicius arba per didelis skaicius), bandykite vel.\n";
+		}
+		else if (sk < nuo || sk > iki) {
+			if (iki == be_ribos) {
+				std::cout << "Skaicius turi buti ne mazesnis nei " << nuo << ".\n";
+			}
+			else {
+				std::cout << "Skaicius turi buti nuo " << nuo << " iki " << iki << ".\n";
+			}
+		}
+		else {
+			return sk;
+		}
+		std::cout << klausimas;
+	}
+	std::cout << "Ivedamas skaicius " << nuo << std::endl;
+	return nuo;
+}
+
+bool taipArNe(const string& klausimas) {
+	string eilute;
+	std::cout << klausimas;
+	while (std::getline(std::cin, eilute)) {
+		if (eilute == "y") return true;
+		if (eilute == "n") return false;
+		std::cout << "Iveskite \"n\" arba \"y\"\n";
+		std::cout << klausimas;
+	}
+	std::cout << "Nepavyko nuskaityti atsakymo, priskiriamas [n] atsakymas" << std::endl;
+	return false;
+}
